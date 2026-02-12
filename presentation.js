@@ -56,9 +56,30 @@ async function displayEmployeeSchedule() {
         }
     }
 }
-displayEmployeeSchedule()
-
+async function addNewEmployee() {
+    console.log('ADD NEW EMPLOYEE');
+    const name = prompt('Enter employee name: ');
+    if (!name) {
+        console.log('Error: Name cannot be empty!');
+        return;
+    }
+    
+    const phone = prompt('Enter phone number: ');
+    if (!phone) {
+        console.log('Error: Phone cannot be empty!');
+        return;
+    }
+    
+    const newEmployee = await business.addEmployee({ name, phone });
+    
+    console.log(' Employee added successfully!');
+    console.log(`   ID: ${newEmployee.employeeId}`);
+    console.log(`   Name: ${newEmployee.name}`);
+    console.log(`   Phone: ${newEmployee.phone}`);
+}
+addNewEmployee()
 module.exports = {
     displayEmployees,
-    displayEmployeeSchedule
+    displayEmployeeSchedule,
+    addNewEmployee
 };
