@@ -19,7 +19,18 @@ function computeShiftDuration(startTime, endTime) {
     
     return (endMinutes - startMinutes) / 60;
 }
+// Employee passthrough
+async function getAllEmployees() {
+    return await persistence.readEmployees();
+}
+
+async function findEmployee(empId) {
+    return await persistence.findEmployee(empId);
+}
 
 module.exports = {
-    computeShiftDuration
+    computeShiftDuration,
+    getAllEmployees,
+    findEmployee
 };
+
