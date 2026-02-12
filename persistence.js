@@ -37,7 +37,11 @@ async function findShift(shiftId) {
     let shifts = await readShifts();
     return shifts.find(shift => shift.shiftId == shiftId);
 }
-
+// ----- ASSIGNMENTS (Bridge) -----
+async function readAssignments() {
+    let data = await fs.readFile('assignments.json', 'utf8');
+    return JSON.parse(data);
+}
 
 module.exports = {
     readEmployees,
@@ -45,5 +49,6 @@ module.exports = {
     findEmployee,
     readShifts,
     writeShifts,
-    findShift
+    findShift,
+    readAssignments
 };
