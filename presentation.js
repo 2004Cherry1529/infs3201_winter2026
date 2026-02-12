@@ -77,9 +77,48 @@ async function addNewEmployee() {
     console.log(`   Name: ${newEmployee.name}`);
     console.log(`   Phone: ${newEmployee.phone}`);
 }
-addNewEmployee()
+async function assignEmployeeToShift() {
+    console.log('ASSIGN EMPLOYEE TO SHIFT');
+    
+    const empId = prompt('Enter employee ID: ');
+    
+    const employee = await business.findEmployee(empId);
+    if (!employee) {
+        console.log(' Error: Employee does not exist!');
+        return;
+    }
+    
+    const shiftId = prompt('Enter shift ID: ');
+    
+    const shift = await business.findShift(shiftId);
+    if (!shift) {
+        console.log(' Error: Shift does not exist!');
+        return;
+    }
+    
+    console.log('\nShift Details:');
+    console.log(`   Date: ${shift.date}`);
+    console.log(`   Time: ${shift.startTime} - ${shift.endTime}`);
+    
+    const confirm = prompt('\nConfirm assignment? (y/n): ');
+    if (confirm.toLowerCase() !== 'y') {
+        console.log(' Assignment cancelled.');
+        return;
+    }
+    
+    const result = await business.assignShift(empId, shiftId);
+    
+    if (result === 'Ok') {
+        console.log(' Shift Recorded Successfully!');
+    } else {
+        console.log(`${result}`); // Shows hours limit error message
+    }
+
+}
+assignEmployeeToShift()
 module.exports = {
     displayEmployees,
     displayEmployeeSchedule,
-    addNewEmployee
-};
+    addNewEmployee,
+    assignEmployeeToShift
+}
