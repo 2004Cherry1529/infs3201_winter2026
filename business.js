@@ -45,6 +45,11 @@ async function findAssignment(empId, shiftId) {
     return await persistence.findAssignment(empId, shiftId);
 }
 
+// Config passthrough
+async function getConfig() {
+    return await persistence.readConfig();
+}
+
 module.exports = {
     computeShiftDuration,
     getAllEmployees,
@@ -52,6 +57,6 @@ module.exports = {
     getAllShifts,
     findShift,
     getEmployeeShifts,
-    findAssignment
+    findAssignment,
+    getConfig
 };
-
