@@ -25,8 +25,15 @@ async function findEmployee(empId) {
     const employees = await readEmployees();
     return employees.find(emp => emp.employeeId === empId) || null;
 }
+// ----- SHIFTS -----
+async function readShifts() {
+    let data = await fs.readFile('shifts.json', 'utf8');
+    return JSON.parse(data);
+}
+
 module.exports = {
     readEmployees,
     writeEmployees,
-    findEmployee
+    findEmployee,
+    readShifts
 };
