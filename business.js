@@ -36,12 +36,22 @@ async function findShift(shiftId) {
     return await persistence.findShift(shiftId);
 }
 
+// Assignment passthrough
+async function getEmployeeShifts(empId) {
+    return await persistence.getEmployeeShifts(empId);
+}
+
+async function findAssignment(empId, shiftId) {
+    return await persistence.findAssignment(empId, shiftId);
+}
 
 module.exports = {
     computeShiftDuration,
     getAllEmployees,
     findEmployee,
     getAllShifts,
-    findShift
+    findShift,
+    getEmployeeShifts,
+    findAssignment
 };
 
