@@ -1,4 +1,5 @@
 const persistence = require('./persistence.js');
+
 /**
  * Calculates hours between start and end times
  * 
@@ -20,6 +21,7 @@ function computeShiftDuration(startTime, endTime) {
     
     return (endMinutes - startMinutes) / 60;
 }
+
 // Employee passthrough
 async function getAllEmployees() {
     return await persistence.readEmployees();
@@ -28,6 +30,7 @@ async function getAllEmployees() {
 async function findEmployee(empId) {
     return await persistence.findEmployee(empId);
 }
+
 // Shift passthrough
 async function getAllShifts() {
     return await persistence.readShifts();
@@ -50,6 +53,7 @@ async function findAssignment(empId, shiftId) {
 async function getConfig() {
     return await persistence.readConfig();
 }
+
 // ----- BUSINESS LOGIC: ADD EMPLOYEE -----
 async function addEmployee(employeeData) {
     let employees = await persistence.readEmployees();
@@ -70,13 +74,20 @@ async function addEmployee(employeeData) {
     await persistence.writeEmployees(employees);
     return newEmployee;
 }
+
 // ----- BUSINESS LOGIC: SCHEDULE VALIDATION (NEW FEATURE) -----
 async function canScheduleEmployee(empId, date, startTime, endTime) {
     const config = await persistence.readConfig();
     const maxHours = config.maxDailyHours;
     
     const shifts = await persistence.getEmployeeShifts(empId);
-    const shiftsOnDate = shifts.filter(shift => shift.date === date);
+    
+    let shiftsOnDate = [];
+    for (let shift of shifts) {
+        if (shift.date === date) {
+            shiftsOnDate.push(shift);
+        }
+    }
     
     let totalHours = 0;
     for (let shift of shiftsOnDate) {
@@ -86,6 +97,7 @@ async function canScheduleEmployee(empId, date, startTime, endTime) {
     totalHours += computeShiftDuration(startTime, endTime);
     return totalHours <= maxHours;
 }
+
 // ----- BUSINESS LOGIC: ASSIGN SHIFT WITH VALIDATION -----
 async function assignShift(empId, shiftId) {
     let employee = await persistence.findEmployee(empId);
@@ -109,6 +121,7 @@ async function assignShift(empId, shiftId) {
     await persistence.addAssignment(empId, shiftId);
     return "Ok";
 }
+
 module.exports = {
     computeShiftDuration,
     getAllEmployees,
