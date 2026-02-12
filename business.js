@@ -86,6 +86,29 @@ async function canScheduleEmployee(empId, date, startTime, endTime) {
     totalHours += computeShiftDuration(startTime, endTime);
     return totalHours <= maxHours;
 }
+// ----- BUSINESS LOGIC: ASSIGN SHIFT WITH VALIDATION -----
+async function assignShift(empId, shiftId) {
+    let employee = await persistence.findEmployee(empId);
+    if (!employee) return "Employee does not exist";
+    
+    let shift = await persistence.findShift(shiftId);
+    if (!shift) return "Shift does not exist";
+    
+    let assignment = await persistence.findAssignment(empId, shiftId);
+    if (assignment) return "Employee already assigned to shift";
+    
+    let canSchedule = await canScheduleEmployee(
+        empId, 
+        shift.date, 
+        shift.startTime, 
+        shift.endTime
+    );
+    
+    if (!canSchedule) return "Cannot assign - exceeds maximum daily hours";
+    
+    await persistence.addAssignment(empId, shiftId);
+    return "Ok";
+}
 module.exports = {
     computeShiftDuration,
     getAllEmployees,
@@ -96,5 +119,6 @@ module.exports = {
     findAssignment,
     getConfig,
     addEmployee,
-    canScheduleEmployee
+    canScheduleEmployee,
+    assignShift
 };
