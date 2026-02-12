@@ -16,7 +16,17 @@ async function readEmployees() {
 async function writeEmployees(employees) {
     await fs.writeFile('employees.json', JSON.stringify(employees, null, 4));
 }
+/**
+ * Finds a single employee by their ID
+ * @param {string} empId - Employee ID to find (e.g., 'E001')
+ * @returns {Promise<Object|null>} Employee object or null if not found
+ */
+async function findEmployee(empId) {
+    const employees = await readEmployees();
+    return employees.find(emp => emp.employeeId === empId) || null;
+}
 module.exports = {
     readEmployees,
-    writeEmployees
+    writeEmployees,
+    findEmployee
 };
