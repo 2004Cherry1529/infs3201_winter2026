@@ -10,6 +10,7 @@ const persistence = require('./persistence.js');
  * @param {string} endTime - Format "HH:MM"
  * @returns {number} Hours as decimal
  */
+// SCHEDULE LIMITATIONS FEATURE - maxDailyHours validation
 function computeShiftDuration(startTime, endTime) {
     const [startHour, startMin] = startTime.split(':').map(Number);
     const [endHour, endMin] = endTime.split(':').map(Number);
