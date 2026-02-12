@@ -66,6 +66,15 @@ async function addAssignment(empId, shiftId) {
     assignments.push({ employeeId: empId, shiftId: shiftId });
     await writeAssignments(assignments);
 }
+// ----- CONFIG (NEW) -----
+async function readConfig() {
+    try {
+        let data = await fs.readFile('config.json', 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        return { maxDailyHours: 9 };
+    }
+}
 module.exports = {
     readEmployees,
     writeEmployees,
@@ -77,5 +86,6 @@ module.exports = {
     writeAssignments,
     findAssignment,
     getEmployeeShifts,
-    addAssignment
+    addAssignment,
+    readConfig
 };
