@@ -30,10 +30,14 @@ async function readShifts() {
     let data = await fs.readFile('shifts.json', 'utf8');
     return JSON.parse(data);
 }
+async function writeShifts(shifts) {
+    await fs.writeFile('shifts.json', JSON.stringify(shifts, null, 4));
+}
 
 module.exports = {
     readEmployees,
     writeEmployees,
     findEmployee,
-    readShifts
+    readShifts,
+    writeShifts
 };
