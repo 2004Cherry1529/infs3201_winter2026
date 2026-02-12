@@ -61,6 +61,11 @@ async function getEmployeeShifts(empId) {
     // Return full shift details
     return shifts.filter(s => shiftIds.includes(s.shiftId));
 }
+async function addAssignment(empId, shiftId) {
+    let assignments = await readAssignments();
+    assignments.push({ employeeId: empId, shiftId: shiftId });
+    await writeAssignments(assignments);
+}
 module.exports = {
     readEmployees,
     writeEmployees,
@@ -71,5 +76,6 @@ module.exports = {
     readAssignments,
     writeAssignments,
     findAssignment,
-    getEmployeeShifts
+    getEmployeeShifts,
+    addAssignment
 };
