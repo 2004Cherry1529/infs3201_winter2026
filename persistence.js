@@ -16,6 +16,7 @@ async function readEmployees() {
 async function writeEmployees(employees) {
     await fs.writeFile('employees.json', JSON.stringify(employees, null, 4));
 }
+
 /**
  * Finds a single employee by their ID
  * @param {string} empId - Employee ID to find (e.g., 'E001')
@@ -23,49 +24,91 @@ async function writeEmployees(employees) {
  */
 async function findEmployee(empId) {
     const employees = await readEmployees();
-    return employees.find(emp => emp.employeeId === empId) || null;
+    // ❌ REMOVED .find() - replaced with for loop
+    for (let emp of employees) {
+        if (emp.employeeId === empId) {
+            return emp;
+        }
+    }
+    return null;
 }
+
 // ----- SHIFTS -----
 async function readShifts() {
     let data = await fs.readFile('shifts.json', 'utf8');
     return JSON.parse(data);
 }
+
 async function writeShifts(shifts) {
     await fs.writeFile('shifts.json', JSON.stringify(shifts, null, 4));
 }
+
 async function findShift(shiftId) {
     let shifts = await readShifts();
-    return shifts.find(shift => shift.shiftId == shiftId);
+    // ❌ REMOVED .find() - replaced with for loop
+    for (let shift of shifts) {
+        if (shift.shiftId == shiftId) {
+            return shift;
+        }
+    }
+    return null;
 }
+
 // ----- ASSIGNMENTS (Bridge) -----
 async function readAssignments() {
     let data = await fs.readFile('assignments.json', 'utf8');
     return JSON.parse(data);
 }
+
 async function writeAssignments(assignments) {
     await fs.writeFile('assignments.json', JSON.stringify(assignments, null, 4));
 }
+
 async function findAssignment(empId, shiftId) {
     let assignments = await readAssignments();
-    return assignments.find(a => a.employeeId === empId && a.shiftId === shiftId);
+    // ❌ REMOVED .find() - replaced with for loop
+    for (let a of assignments) {
+        if (a.employeeId === empId && a.shiftId === shiftId) {
+            return a;
+        }
+    }
+    return null;
 }
+
 async function getEmployeeShifts(empId) {
     let assignments = await readAssignments();
     let shifts = await readShifts();
     
+    // ❌ REMOVED .filter() and .map() - replaced with for loops
     // Get shift IDs for this employee
-    let shiftIds = assignments
-        .filter(a => a.employeeId === empId)
-        .map(a => a.shiftId);
+    let shiftIds = [];
+    for (let a of assignments) {
+        if (a.employeeId === empId) {
+            shiftIds.push(a.shiftId);
+        }
+    }
     
+    // ❌ REMOVED .filter() - replaced with for loop
     // Return full shift details
-    return shifts.filter(s => shiftIds.includes(s.shiftId));
+    let employeeShifts = [];
+    for (let shift of shifts) {
+        for (let id of shiftIds) {
+            if (shift.shiftId === id) {
+                employeeShifts.push(shift);
+                break;
+            }
+        }
+    }
+    
+    return employeeShifts;
 }
+
 async function addAssignment(empId, shiftId) {
     let assignments = await readAssignments();
     assignments.push({ employeeId: empId, shiftId: shiftId });
     await writeAssignments(assignments);
 }
+
 // ----- CONFIG (NEW) -----
 async function readConfig() {
     try {
@@ -75,6 +118,7 @@ async function readConfig() {
         return { maxDailyHours: 9 };
     }
 }
+
 module.exports = {
     readEmployees,
     writeEmployees,
