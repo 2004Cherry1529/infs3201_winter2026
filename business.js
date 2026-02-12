@@ -1,0 +1,1 @@
+const persistence = require('./persistence.js');
