@@ -115,10 +115,53 @@ async function assignEmployeeToShift() {
     }
 
 }
-assignEmployeeToShift()
+function showMenu() {
+    console.log('EMPLOYEE SCHEDULING SYSTEM');
+    console.log('1. Show all employees');
+    console.log('2. Add new employee');
+    console.log('3. Assign employee to shift');
+    console.log('4. View employee schedule');
+    console.log('5. Exit');
+}
+
+async function main() {
+    console.log('Welcome to Employee Scheduling System');
+    
+    let running = true;
+    while (running) {
+        showMenu();
+        const choice = prompt('What is your choice > ');
+        
+        switch (choice) {
+            case '1':
+                await displayEmployees();
+                break;
+            case '2':
+                await addNewEmployee();
+                break;
+            case '3':
+                await assignEmployeeToShift();
+                break;
+            case '4':
+                await displayEmployeeSchedule();
+                break;
+            case '5':
+                running = false;
+                break;
+            default:
+                console.log(' Error: Invalid selection. Please enter 1-5.\n');
+        }
+    }
+}
+
+if (require.main === module) {
+    main();
+}
+
 module.exports = {
     displayEmployees,
     displayEmployeeSchedule,
     addNewEmployee,
-    assignEmployeeToShift
+    assignEmployeeToShift,
+    main
 }
