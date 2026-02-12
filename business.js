@@ -70,6 +70,22 @@ async function addEmployee(employeeData) {
     await persistence.writeEmployees(employees);
     return newEmployee;
 }
+// ----- BUSINESS LOGIC: SCHEDULE VALIDATION (NEW FEATURE) -----
+async function canScheduleEmployee(empId, date, startTime, endTime) {
+    const config = await persistence.readConfig();
+    const maxHours = config.maxDailyHours;
+    
+    const shifts = await persistence.getEmployeeShifts(empId);
+    const shiftsOnDate = shifts.filter(shift => shift.date === date);
+    
+    let totalHours = 0;
+    for (let shift of shiftsOnDate) {
+        totalHours += computeShiftDuration(shift.startTime, shift.endTime);
+    }
+    
+    totalHours += computeShiftDuration(startTime, endTime);
+    return totalHours <= maxHours;
+}
 module.exports = {
     computeShiftDuration,
     getAllEmployees,
@@ -79,5 +95,6 @@ module.exports = {
     getEmployeeShifts,
     findAssignment,
     getConfig,
-    addEmployee
+    addEmployee,
+    canScheduleEmployee
 };
