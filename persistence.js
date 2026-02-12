@@ -33,11 +33,17 @@ async function readShifts() {
 async function writeShifts(shifts) {
     await fs.writeFile('shifts.json', JSON.stringify(shifts, null, 4));
 }
+async function findShift(shiftId) {
+    let shifts = await readShifts();
+    return shifts.find(shift => shift.shiftId == shiftId);
+}
+
 
 module.exports = {
     readEmployees,
     writeEmployees,
     findEmployee,
     readShifts,
-    writeShifts
+    writeShifts,
+    findShift
 };
