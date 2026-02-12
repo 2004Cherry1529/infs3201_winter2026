@@ -45,6 +45,10 @@ async function readAssignments() {
 async function writeAssignments(assignments) {
     await fs.writeFile('assignments.json', JSON.stringify(assignments, null, 4));
 }
+async function findAssignment(empId, shiftId) {
+    let assignments = await readAssignments();
+    return assignments.find(a => a.employeeId === empId && a.shiftId === shiftId);
+}
 module.exports = {
     readEmployees,
     writeEmployees,
@@ -53,5 +57,6 @@ module.exports = {
     writeShifts,
     findShift,
     readAssignments,
-    writeAssignments
+    writeAssignments,
+    findAssignment
 };
