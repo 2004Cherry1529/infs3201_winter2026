@@ -50,7 +50,26 @@ async function findAssignment(empId, shiftId) {
 async function getConfig() {
     return await persistence.readConfig();
 }
-
+// ----- BUSINESS LOGIC: ADD EMPLOYEE -----
+async function addEmployee(employeeData) {
+    let employees = await persistence.readEmployees();
+    
+    let maxId = 0;
+    for (let e of employees) {
+        let eid = Number(e.employeeId.slice(1));
+        if (eid > maxId) maxId = eid;
+    }
+    
+    let newEmployee = {
+        name: employeeData.name,
+        phone: employeeData.phone,
+        employeeId: `E${String(maxId + 1).padStart(3, '0')}`
+    };
+    
+    employees.push(newEmployee);
+    await persistence.writeEmployees(employees);
+    return newEmployee;
+}
 module.exports = {
     computeShiftDuration,
     getAllEmployees,
@@ -59,5 +78,6 @@ module.exports = {
     findShift,
     getEmployeeShifts,
     findAssignment,
-    getConfig
+    getConfig,
+    addEmployee
 };
