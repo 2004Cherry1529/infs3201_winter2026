@@ -49,6 +49,18 @@ async function findAssignment(empId, shiftId) {
     let assignments = await readAssignments();
     return assignments.find(a => a.employeeId === empId && a.shiftId === shiftId);
 }
+async function getEmployeeShifts(empId) {
+    let assignments = await readAssignments();
+    let shifts = await readShifts();
+    
+    // Get shift IDs for this employee
+    let shiftIds = assignments
+        .filter(a => a.employeeId === empId)
+        .map(a => a.shiftId);
+    
+    // Return full shift details
+    return shifts.filter(s => shiftIds.includes(s.shiftId));
+}
 module.exports = {
     readEmployees,
     writeEmployees,
@@ -58,5 +70,6 @@ module.exports = {
     findShift,
     readAssignments,
     writeAssignments,
-    findAssignment
+    findAssignment,
+    getEmployeeShifts
 };
