@@ -42,7 +42,9 @@ async function readAssignments() {
     let data = await fs.readFile('assignments.json', 'utf8');
     return JSON.parse(data);
 }
-
+async function writeAssignments(assignments) {
+    await fs.writeFile('assignments.json', JSON.stringify(assignments, null, 4));
+}
 module.exports = {
     readEmployees,
     writeEmployees,
@@ -50,5 +52,6 @@ module.exports = {
     readShifts,
     writeShifts,
     findShift,
-    readAssignments
+    readAssignments,
+    writeAssignments
 };
